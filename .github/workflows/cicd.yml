@@ -11,7 +11,7 @@ on:
 
 env:
   DOCKERHUB_USERNAME: nikhil07h07
-  DOCKERHUB_PASSWORD: @Sreenikhil_07
+  DOCKERHUB_PASSWORD: '@Sreenikhil_07'
   FRONTEND_IMAGE: fitness-tracker-frontend
   BACKEND_IMAGE: fitness-tracker-backend
 
@@ -31,16 +31,12 @@ jobs:
         working-directory: ./fitness-tracker-frontend
         run: npm install
 
-      - name: Fix Vite permissions
-        working-directory: ./fitness-tracker-frontend
-        run: chmod +x ./node_modules/.bin/vite
-
       - name: Build React frontend
         working-directory: ./fitness-tracker-frontend
-        run: npx vite build --base=/fitness-tracker-frontend/
+        run: npm run build
 
       - name: Build Docker image for frontend
-        run: docker build -t ${{ env.DOCKERHUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:latest ./fitness-tracker-frontend
+        run: docker build -t ${{ env.DOCKERHUB_USERNAME }}/fitness-frontend:latest ./fitness-tracker-frontend
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -49,7 +45,7 @@ jobs:
           password: ${{ env.DOCKERHUB_PASSWORD }}
 
       - name: Push frontend image
-        run: docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:latest
+        run: docker push ${{ env.DOCKERHUB_USERNAME }}/fitness-frontend:latest
 
   build-backend:
     runs-on: ubuntu-latest
@@ -69,7 +65,7 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Build Docker image for backend
-        run: docker build -t ${{ env.DOCKERHUB_USERNAME }}/${{ env.BACKEND_IMAGE }}:latest ./fitness-tracker-backend
+        run: docker build -t ${{ env.DOCKERHUB_USERNAME }}/fitness-backend:latest ./fitness-tracker-backend
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -78,4 +74,4 @@ jobs:
           password: ${{ env.DOCKERHUB_PASSWORD }}
 
       - name: Push backend image
-        run: docker push ${{ env.DOCKERHUB_USERNAME }}/${{ env.BACKEND_IMAGE }}:latest
+        run: docker push ${{ env.DOCKERHUB_USERNAME }}/fitness-backend:latest
