@@ -33,7 +33,7 @@ jobs:
 
       - name: Build React frontend
         working-directory: ./fitness-tracker-frontend
-        run: npm run build
+        run: npx vite build --base=/fitness-tracker-frontend/
 
       - name: Build Docker image for frontend
         run: docker build -t ${{ env.DOCKERHUB_USERNAME }}/fitness-frontend:latest ./fitness-tracker-frontend
